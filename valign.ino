@@ -1,10 +1,11 @@
 #include "valign.h"
+#include "config.h"
 
-static uint8_t _DriftTime_S = 15;
+static const uint8_t MAX_DRIFT_TIME_S = 240;
 
 void valign_render_drift_time() {
   arcada.display->print("Drift Time: ");
-  arcada.display->print(_DriftTime_S);
+  arcada.display->print(SharedConfig.valign_drift_time_s);
   arcada.display->print("s");
 }
 
@@ -14,7 +15,7 @@ AppState valign_set_drift_time(bool init) {
 
   if (init) {
     dirty = true;
-    tempval = _DriftTime_S;
+    tempval = SharedConfig.valign_drift_time_s;
   }
 
   if (dirty) {
@@ -42,10 +43,14 @@ AppState valign_set_drift_time(bool init) {
     tempval -= 1;
   }
 
+  tempval = constrain(tempval, 0, MAX_DRIFT_TIME_S);
+
+
   if (pressed_buttons & ARCADA_BUTTONMASK_B) {
     return IN_MENU;
   } else if (pressed_buttons & ARCADA_BUTTONMASK_A) {
-    _DriftTime_S = tempval;
+    SharedConfig.valign_drift_time_s = tempval;
+    config_save(&SharedConfig);
     return IN_MENU;
   } else {
     return IN_CALLBACK;

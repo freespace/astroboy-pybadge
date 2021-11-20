@@ -3,6 +3,7 @@
 #include "types.h"
 #include "about.h"
 #include "valign.h"
+#include "config.h"
 
 Adafruit_Arcada arcada;
 
@@ -12,6 +13,7 @@ AppState _AppState = IN_MENU;
 MenuCallback_Ptr _currentCallback;
 Menu *_MenuStack[8];
 uint8_t _MenuStackTop = 0;
+Config SharedConfig;
 
 Menu _VAlignMenu = {
   {
@@ -79,14 +81,19 @@ void setup() {
   arcada.display->setCursor(0, 0);
   arcada.display->setTextColor(ARCADA_RED);
   arcada.display->setTextSize(2);
-  arcada.display->print("ASTROBOY");
-
-  delay(1000);
+  arcada.display->println("ASTROBOY");
 
   arcada.display->setTextSize(1);
-  arcada.display->fillScreen(ARCADA_BLACK);
+
+  config_load(&SharedConfig);
 
   _MenuStack[0] = &_MainMenu;
+
+
+  arcada.display->println("Press any button");
+  while (readButtons() == 0);
+
+  arcada.display->fillScreen(ARCADA_BLACK);
 }
 
 void loop() {

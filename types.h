@@ -31,4 +31,15 @@ typedef struct {
   int8_t selection_position;
 
 } Menu;
+
+typedef struct {
+  uint8_t valign_drift_time_s;
+  uint8_t servo_angle_endpoint_1;
+  uint8_t servo_angle_endpoint_2;
+
+  uint8_t camera_exposure_time_t;
+  uint8_t camera_num_captures;
+  uint8_t camera_write_time_t;
+} Config;
+
 #endif
