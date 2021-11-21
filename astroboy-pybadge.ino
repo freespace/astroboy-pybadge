@@ -30,12 +30,12 @@ AppState show_settings_menu(bool init) {
 
 Menu main_menu = {
   {
-    // text, on_select, render
-    {"Do V-Align", show_valign_menu, NULL},
-    {"Take Dark Frames", NULL, NULL},
-    {"Take Light Frames", NULL, NULL},
-    {"Settings", show_settings_menu, NULL},
-    {"About", show_about, NULL},
+    // text, on_select, render, submenu
+    {"Do V-Align",        NULL,       NULL,   &valign_menu},
+    {"Take Dark Frames",  NULL,       NULL,   NULL},
+    {"Take Light Frames", NULL,       NULL,   NULL},
+    {"Settings",          NULL,       NULL,   &settings_menu},
+    {"About",             show_about, NULL,   NULL},
   },
   5,
   0

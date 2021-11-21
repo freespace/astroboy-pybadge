@@ -83,8 +83,17 @@ AppState menu_draw() {
     menu_pop();
     return IN_MENU;
   } else if (pressed_buttons & ARCADA_BUTTONMASK_A) {
-    _currentCallback = menu->entries[menu->selection_position].on_select;
-    return _currentCallback(true);
+    MenuEntry *entry = &(menu->entries[menu->selection_position]);
+
+    if (entry->on_select) {
+      _currentCallback = entry->on_select;
+      return _currentCallback(true);
+    } else if (entry->submenu) {
+      menu_push(entry->submenu);
+      return IN_MENU;
+    } else {
+      return IN_MENU;
+    }
   } else {
     return IN_MENU;
   }

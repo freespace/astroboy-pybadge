@@ -13,13 +13,17 @@ typedef AppState (*MenuCallback_Ptr)(bool init);
 // callback to get the text for a menu entry
 typedef void (*MenuEntryRenderCallback)();
 
+struct Menu_t;
+
 typedef struct {
   char *text;
   MenuCallback_Ptr on_select;
   MenuEntryRenderCallback render;
+  struct Menu_t *submenu;
 } MenuEntry;
 
-typedef struct {
+
+struct Menu_t {
   // this is inefficient b/c not all menus have the same number of entries but we have resources
   // to spare
   MenuEntry entries[8];
@@ -30,7 +34,9 @@ typedef struct {
   // position of the current selection
   int8_t selection_position;
 
-} Menu;
+};
+
+typedef struct Menu_t Menu;
 
 typedef struct {
   uint8_t valign_drift_time_s;
