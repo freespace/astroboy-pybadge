@@ -15,7 +15,7 @@ void config_set_defaults(Config *conf) {
   conf->camera_write_time_t = 5;
 }
 
-bool config_load(Config *conf) {
+bool config_init(Config *conf) {
   if (arcada.filesysBegin()) {
     arcada.display->println("Found storage");
     File conf_file = arcada.open(CONFIG_FILE_NAME);

@@ -4,9 +4,9 @@
 #include "types.h"
 
 /**
- * Loads config from flash
+ * Loads config from flash into conf
  */
-bool config_load(Config *conf);
+bool config_init(Config *conf);
 
 /**
  * Saves config to flash. No other files can be open.

@@ -80,7 +80,7 @@ void setup() {
 
   arcada.display->setTextSize(1);
 
-  config_load(&SharedConfig);
+  config_init(&SharedConfig);
 
   menu_init(&main_menu);
 
