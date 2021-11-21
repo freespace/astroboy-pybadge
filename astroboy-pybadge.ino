@@ -1,51 +1,40 @@
 #include <Adafruit_Arcada.h>
 
 #include "types.h"
+#include "menu.h"
 #include "about.h"
 #include "valign.h"
 #include "config.h"
+#include "settings.h"
 
 Adafruit_Arcada arcada;
 
 const uint8_t MAX_BACKLIGHT = 128;
 
 AppState _AppState = IN_MENU;
-MenuCallback_Ptr _currentCallback;
-Menu *_MenuStack[8];
-uint8_t _MenuStackTop = 0;
 Config SharedConfig;
 
-Menu _VAlignMenu = {
-  {
-    // text, on_select, render
-    {
-      NULL,
-      valign_set_drift_time,
-      valign_render_drift_time},
-    {"Start", NULL, NULL},
-  },
-  2,
-  0
-};
 
 AppState show_valign_menu(bool init) {
-  _MenuStackTop += 1;
-  _MenuStack[_MenuStackTop] = &_VAlignMenu;
-
-  // reset position to 0 which is the expected thing
-  _VAlignMenu.selection_position = 0;
+  menu_push(&valign_menu);
   return IN_MENU;
 }
 
-Menu _MainMenu = {
+AppState show_settings_menu(bool init) {
+  menu_push(&settings_menu);
+  return IN_MENU;
+}
+
+Menu main_menu = {
   {
     // text, on_select, render
     {"Do V-Align", show_valign_menu, NULL},
     {"Take Dark Frames", NULL, NULL},
     {"Take Light Frames", NULL, NULL},
+    {"Settings", show_settings_menu, NULL},
     {"About", show_about, NULL},
   },
-  4,
+  5,
   0
 };
 bool _Dirty = true;
@@ -87,8 +76,7 @@ void setup() {
 
   config_load(&SharedConfig);
 
-  _MenuStack[0] = &_MainMenu;
-
+  menu_init(&main_menu);
 
   arcada.display->println("Press any button");
   while (readButtons() == 0);
@@ -99,11 +87,11 @@ void setup() {
 void loop() {
   switch(_AppState) {
     case IN_MENU:
-      _AppState = drawCurrentMenu();
+      _AppState = menu_draw();
       break;
 
     case IN_CALLBACK:
-      _AppState = _currentCallback(false);
+      _AppState = menu_callback(false);
       break;
 
     default:
@@ -114,59 +102,3 @@ void loop() {
   }
 }
 
-AppState drawCurrentMenu() {
-  Menu *menu = _MenuStack[_MenuStackTop];
-
-  if (_Dirty) {
-    _Dirty = false;
-    arcada.display->fillScreen(ARCADA_BLACK);
-    arcada.display->setTextSize(1);
-
-    for (int idx = 0; idx < menu->num_entries; ++idx) {
-      MenuEntry *entry = &menu->entries[idx];
-
-      arcada.display->setCursor(1, idx*10);
-      if (idx == menu->selection_position) {
-        arcada.display->print((char)0x10);
-      } else {
-        arcada.display->print((char)0x00);
-      }
-
-      if (entry->render) {
-        entry->render();
-      } else {
-        arcada.display->print(entry->text);
-      }
-    }
-  }
-
-  uint8_t pressed_buttons = readButtons();
-
-  if (pressed_buttons & ARCADA_BUTTONMASK_UP) {
-    menu->selection_position -=1;
-  }
-
-  if (pressed_buttons & ARCADA_BUTTONMASK_DOWN) {
-    menu->selection_position += 1;
-  }
-
-  menu->selection_position = constrain(menu->selection_position, 0, menu->num_entries-1);
-
-  if (pressed_buttons) {
-    _Dirty = true;
-    delay(250);
-  }
-
-  // let's say going back has precedence
-  if (pressed_buttons & ARCADA_BUTTONMASK_B) {
-    if (_MenuStackTop > 0) {
-      _MenuStackTop -= 1;
-    }
-    return IN_MENU;
-  } else if (pressed_buttons & ARCADA_BUTTONMASK_A) {
-    _currentCallback = menu->entries[menu->selection_position].on_select;
-    return _currentCallback(true);
-  } else {
-    return IN_MENU;
-  }
-}
