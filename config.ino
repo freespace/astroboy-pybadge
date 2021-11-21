@@ -1,10 +1,12 @@
 #include "config.h"
 
-static const uint8_t CONFIG_VERSION = 1;
+static const uint8_t CONFIG_VERSION = 2;
 static const char *CONFIG_FILE_NAME = "/config.txt";
 
 void config_set_defaults(Config *conf) {
   conf->valign_drift_time_s = 10;
+
+  conf->servo_neutral_angle = 90;
   conf->servo_angle_endpoint_1 = 80;
   conf->servo_angle_endpoint_2 = 100;
 
@@ -51,9 +53,9 @@ bool config_read(File *conf_file, Config *conf) {
 
   conf->valign_drift_time_s = conf_file->parseInt();
 
+  conf->servo_neutral_angle = conf_file->parseInt();
   conf->servo_angle_endpoint_1 = conf_file->parseInt();
   conf->servo_angle_endpoint_2= conf_file->parseInt();
-
 
   conf->camera_exposure_time_t = conf_file->parseInt();
   conf->camera_num_captures = conf_file->parseInt();
@@ -73,6 +75,9 @@ bool config_save(Config *conf) {
     conf_file.print(" ");
 
     conf_file.print(conf->valign_drift_time_s);
+    conf_file.print(" ");
+
+    conf_file.print(conf->servo_neutral_angle);
     conf_file.print(" ");
 
     conf_file.print(conf->servo_angle_endpoint_1);

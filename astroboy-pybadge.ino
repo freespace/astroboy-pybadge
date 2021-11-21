@@ -1,4 +1,5 @@
 #include <Adafruit_Arcada.h>
+#include <Servo.h>
 
 #include "types.h"
 #include "menu.h"
@@ -6,6 +7,7 @@
 #include "valign.h"
 #include "config.h"
 #include "settings.h"
+#include "pin_defs.h"
 
 Adafruit_Arcada arcada;
 
@@ -14,6 +16,7 @@ const uint8_t MAX_BACKLIGHT = 128;
 AppState _AppState = IN_MENU;
 Config SharedConfig;
 
+Servo SAButtonServo;
 
 AppState show_valign_menu(bool init) {
   menu_push(&valign_menu);
@@ -39,6 +42,10 @@ Menu main_menu = {
 };
 bool _Dirty = true;
 
+void resetServo() {
+  SAButtonServo.write(SharedConfig.servo_neutral_angle);
+}
+
 uint8_t readButtons() {
   arcada.readButtons();
   delay(20);
@@ -46,7 +53,6 @@ uint8_t readButtons() {
 }
 
 void setup() {
-  // put your setup code here, to run once:
   if (arcada.arcadaBegin()) {
     arcada.pixels.setPixelColor(0, arcada.pixels.Color(0, 255, 0));
     arcada.pixels.show();
@@ -77,6 +83,9 @@ void setup() {
   config_load(&SharedConfig);
 
   menu_init(&main_menu);
+
+  SAButtonServo.attach(SA_BUTTON_SERVO_PIN);
+  SAButtonServo.write(SharedConfig.servo_neutral_angle);
 
   arcada.display->println("Press any button");
   while (readButtons() == 0);

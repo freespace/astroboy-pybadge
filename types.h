@@ -34,6 +34,8 @@ typedef struct {
 
 typedef struct {
   uint8_t valign_drift_time_s;
+
+  uint8_t servo_neutral_angle;
   uint8_t servo_angle_endpoint_1;
   uint8_t servo_angle_endpoint_2;
 
@@ -41,5 +43,11 @@ typedef struct {
   uint8_t camera_num_captures;
   uint8_t camera_write_time_t;
 } Config;
+
+typedef enum {
+  SET_ENDPOINT_CANCEL,
+  SET_ENDPOINT_ACCEPT,
+  SET_ENDPOINT_INPROG,
+} SetEndpointState;
 
 #endif
