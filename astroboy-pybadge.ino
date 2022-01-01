@@ -33,8 +33,23 @@ Menu main_menu = {
 };
 bool _Dirty = true;
 
-void resetServo() {
+void servo_reset() {
   SAButtonServo.write(SharedConfig.servo_neutral_angle);
+}
+
+/**
+ * Returns true if endpoint is known, false otherwise
+ */
+bool servo_go_endpoint(uint8_t ep) {
+  if (ep == 1) {
+    SAButtonServo.write(SharedConfig.servo_angle_endpoint_1);
+    return true;
+  } else if (ep == 2) {
+    SAButtonServo.write(SharedConfig.servo_angle_endpoint_2);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 uint8_t readButtons() {
