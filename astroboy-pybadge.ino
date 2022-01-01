@@ -8,6 +8,7 @@
 #include "config.h"
 #include "settings.h"
 #include "pin_defs.h"
+#include "camera.h"
 
 Adafruit_Arcada arcada;
 
@@ -17,16 +18,6 @@ AppState _AppState = IN_MENU;
 Config SharedConfig;
 
 Servo SAButtonServo;
-
-AppState show_valign_menu(bool init) {
-  menu_push(&valign_menu);
-  return IN_MENU;
-}
-
-AppState show_settings_menu(bool init) {
-  menu_push(&settings_menu);
-  return IN_MENU;
-}
 
 Menu main_menu = {
   {
@@ -86,6 +77,8 @@ void setup() {
 
   SAButtonServo.attach(SA_BUTTON_SERVO_PIN);
   SAButtonServo.write(SharedConfig.servo_neutral_angle);
+
+  camera_init();
 
   arcada.display->println("Press any button");
   while (readButtons() == 0);
