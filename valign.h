@@ -6,6 +6,8 @@
 
 void valign_render_drift_time();
 AppState valign_set_drift_time(bool init);
+AppState valign_start(bool init);
+AppState valign_start_reversed(bool init);
 
 Menu valign_menu = {
   {
@@ -14,8 +16,8 @@ Menu valign_menu = {
       NULL,
       valign_set_drift_time,
       valign_render_drift_time},
-    {"Start", NULL, NULL},
-    {"Start (reversed)", NULL, NULL},
+    {"Start", valign_start, NULL},
+    {"Start (reversed)", valign_start_reversed, NULL},
   },
   3,
   0
