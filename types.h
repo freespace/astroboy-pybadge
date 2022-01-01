@@ -5,9 +5,13 @@ typedef enum {
   IN_CALLBACK,
 } AppState;
 
-// callback when a menu entry is selected. init is true when the callback is called for the first
-// time immediately after user selection and false on subsequent calls in loop().
-// Use this to determine when to init values or draw the screen for the first time.
+/** 
+ * callback when a menu entry is selected. init is true when the callback is called for the first
+ * immediately after user selection and false on subsequent calls in loop().
+ * Use this to determine when to init values or draw the screen for the first time.
+ *
+ * Note that this is called _repeatedly_ until it returns IN_MENU.
+*/
 typedef AppState (*MenuCallback_Ptr)(bool init);
 
 // callback to get the text for a menu entry
