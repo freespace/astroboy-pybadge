@@ -8,6 +8,7 @@ AppState settings_set_servo_endpoint_1(bool init);
 AppState settings_set_servo_endpoint_2(bool init);
 AppState settings_set_servo_neutral(bool init);
 AppState settings_servo_stress_test(bool init);
+AppState settings_camera_trigger_test(bool init);
 
 void settings_render_servo_endpoint_2();
 void settings_render_servo_endpoint_1();
@@ -35,8 +36,13 @@ Menu settings_menu = {
       settings_servo_stress_test,
       NULL,
     },
+    {
+      "Camera Trigger Test",
+      settings_camera_trigger_test,
+      NULL,
+    },
   },
-  4,
+  5,
   0
 };
 

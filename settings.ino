@@ -1,4 +1,5 @@
 #include "settings.h"
+#include "camera.h"
 
 static bool _dirty = false;
 static uint8_t _tempval = 0;
@@ -134,6 +135,23 @@ AppState settings_servo_stress_test(bool init) {
 
   if (readButtons()) {
     resetServo();
+    return IN_MENU;
+  } else {
+    return IN_CALLBACK;
+  }
+}
+
+AppState settings_camera_trigger_test(bool init) {
+  if (init) {
+    arcada.display->fillScreen(ARCADA_BLACK);
+    arcada.display->setCursor(0, 0);
+    arcada.display->setTextSize(1);
+    arcada.display->println("Press any button to release");
+    camera_press_release();
+  }
+
+  if (readButtons()) {
+    camera_press_release();
     return IN_MENU;
   } else {
     return IN_CALLBACK;
