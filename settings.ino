@@ -38,10 +38,10 @@ SetEndpointState _set_endpoint(bool init, uint8_t init_value) {
 
 
   if (pressed_buttons & ARCADA_BUTTONMASK_B) {
-    resetServo();
+    servo_reset();
     return SET_ENDPOINT_CANCEL;
   } else if (pressed_buttons & ARCADA_BUTTONMASK_A) {
-    resetServo();
+    servo_reset();
     SAButtonServo.write(SharedConfig.servo_neutral_angle);
     return SET_ENDPOINT_ACCEPT;
   } else {
@@ -102,7 +102,7 @@ AppState settings_set_servo_neutral(bool init) {
     case SET_ENDPOINT_CANCEL:
       // if we don't do this then after setting a new neutral the servo
       // resets to old neutral
-      resetServo();
+      servo_reset();
       return IN_MENU;
       break;
 
@@ -126,15 +126,16 @@ AppState settings_servo_stress_test(bool init) {
   unsigned dt = millis() - last_t;
 
   if (dt < 10000) {
-    SAButtonServo.write(SharedConfig.servo_angle_endpoint_1);
+    servo_go_endpoint(1);
   } else if (dt < 20000) {
+    servo_go_endpoint(2);
     SAButtonServo.write(SharedConfig.servo_angle_endpoint_2);
   } else {
     last_t = millis();
   }
 
   if (readButtons()) {
-    resetServo();
+    servo_reset();
     return IN_MENU;
   } else {
     return IN_CALLBACK;
