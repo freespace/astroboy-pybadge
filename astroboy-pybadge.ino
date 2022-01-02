@@ -9,6 +9,7 @@
 #include "settings.h"
 #include "pin_defs.h"
 #include "camera.h"
+#include "capture.h"
 
 Adafruit_Arcada arcada;
 
@@ -23,8 +24,7 @@ Menu main_menu = {
   {
     // text, on_select, render, submenu
     {"Do V-Align",        NULL,       NULL,   &valign_menu},
-    {"Take Dark Frames",  NULL,       NULL,   NULL},
-    {"Take Light Frames", NULL,       NULL,   NULL},
+    {"Do Captures",       NULL,       NULL,   &capture_menu},
     {"Settings",          NULL,       NULL,   &settings_menu},
     {"About",             show_about, NULL,   NULL},
   },
