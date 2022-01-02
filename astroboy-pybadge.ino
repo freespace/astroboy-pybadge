@@ -23,7 +23,7 @@ Servo SAButtonServo;
 Menu main_menu = {
   {
     // text, on_select, render, submenu
-    {"Do V-Align",        NULL,       NULL,   &valign_menu},
+    {"Do D.A.R.V.",        NULL,       NULL,  &valign_menu},
     {"Do Captures",       NULL,       NULL,   &capture_menu},
     {"Settings",          NULL,       NULL,   &settings_menu},
     {"About",             show_about, NULL,   NULL},
