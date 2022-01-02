@@ -10,9 +10,9 @@ void config_set_defaults(Config *conf) {
   conf->servo_angle_endpoint_1 = 80;
   conf->servo_angle_endpoint_2 = 100;
 
-  conf->camera_exposure_time_t = 20;
+  conf->camera_exposure_time_s = 20;
   conf->camera_num_captures = 10;
-  conf->camera_write_time_t = 5;
+  conf->camera_write_time_s = 5;
 }
 
 bool config_init(Config *conf) {
@@ -57,9 +57,9 @@ bool config_read(File *conf_file, Config *conf) {
   conf->servo_angle_endpoint_1 = conf_file->parseInt();
   conf->servo_angle_endpoint_2= conf_file->parseInt();
 
-  conf->camera_exposure_time_t = conf_file->parseInt();
+  conf->camera_exposure_time_s = conf_file->parseInt();
   conf->camera_num_captures = conf_file->parseInt();
-  conf->camera_write_time_t = conf_file->parseInt();
+  conf->camera_write_time_s = conf_file->parseInt();
 
   return true;
 }
@@ -86,13 +86,13 @@ bool config_save(Config *conf) {
     conf_file.print(conf->servo_angle_endpoint_2);
     conf_file.print(" ");
 
-    conf_file.print(conf->camera_exposure_time_t);
+    conf_file.print(conf->camera_exposure_time_s);
     conf_file.print(" ");
 
     conf_file.print(conf->camera_num_captures);
     conf_file.print(" ");
 
-    conf_file.print(conf->camera_write_time_t);
+    conf_file.print(conf->camera_write_time_s);
     conf_file.print(" ");
 
     success = true;
