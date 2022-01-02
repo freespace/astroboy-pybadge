@@ -130,6 +130,24 @@ AppState settings_set_camera_write_time(bool init) {
   }
 }
 
+AppState settings_set_camera_mirror_lockup_time(bool init) {
+  InputState st = input_get_uint8(
+      init,
+      SharedConfig.camera_mirror_lockup_time_s,
+      0,
+      10,
+      &SharedConfig.camera_mirror_lockup_time_s);
+
+  switch(st) {
+    case INPUT_USER_ACCEPT:
+      config_save(&SharedConfig);
+    case INPUT_USER_CANCEL:
+      return IN_MENU;
+
+    default:
+      return IN_CALLBACK;
+  }
+}
 AppState settings_servo_stress_test(bool init) {
   static unsigned long last_t = 0;
 
@@ -162,16 +180,30 @@ AppState settings_servo_stress_test(bool init) {
 }
 
 AppState settings_camera_trigger_test(bool init) {
+  static bool pressed = false;
   if (init) {
+    pressed = false;
+
     arcada.display->fillScreen(ARCADA_BLACK);
     arcada.display->setCursor(0, 0);
     arcada.display->setTextSize(1);
-    arcada.display->println("Press any button to release");
-    camera_press_release();
+    arcada.display->println("Press A to toggle");
+    arcada.display->println("Press B to exit");
+    camera_press();
   }
 
-  if (readButtons()) {
-    camera_press_release();
+  uint8_t pressed_buttons = readButtons();
+
+  if (pressed_buttons & ARCADA_BUTTONMASK_A) {
+    if (pressed) {
+      camera_release();
+    } else {
+      camera_press();
+    }
+
+    pressed = !pressed;
+    return IN_CALLBACK;
+  } else if (pressed_buttons & ARCADA_BUTTONMASK_B) {
     return IN_MENU;
   } else {
     return IN_CALLBACK;
@@ -194,6 +226,15 @@ void settings_render_servo_neutral() {
 }
 
 void settings_render_camera_write_time() {
-  arcada.display->print("Came. Write Time (s): ");
+  arcada.display->print("Cam. Write Time (s): ");
   arcada.display->print(SharedConfig.camera_write_time_s);
+}
+
+void settings_render_camera_mirror_lockup_time() {
+  arcada.display->print("Mirror Lockup (s): ");
+  if (SharedConfig.camera_mirror_lockup_time_s > 0) {
+    arcada.display->print(SharedConfig.camera_mirror_lockup_time_s);
+  } else {
+    arcada.display->print("Off");
+  }
 }
