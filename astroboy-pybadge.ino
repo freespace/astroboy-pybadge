@@ -13,7 +13,7 @@
 
 Adafruit_Arcada arcada;
 
-const uint8_t MAX_BACKLIGHT = 128;
+const uint8_t MAX_BACKLIGHT = 64;
 
 AppState _AppState = IN_MENU;
 Config SharedConfig;
@@ -61,7 +61,7 @@ uint8_t readButtons() {
 
 void setup() {
   if (arcada.arcadaBegin()) {
-    arcada.pixels.setPixelColor(0, arcada.pixels.Color(255, 165, 0));
+    arcada.pixels.setPixelColor(0, arcada.pixels.Color(116, 184, 165));
     arcada.pixels.setBrightness(1);
     arcada.pixels.show();
     delay(500);
