@@ -61,7 +61,8 @@ uint8_t readButtons() {
 
 void setup() {
   if (arcada.arcadaBegin()) {
-    arcada.pixels.setPixelColor(0, arcada.pixels.Color(0, 255, 0));
+    arcada.pixels.setPixelColor(0, arcada.pixels.Color(255, 165, 0));
+    arcada.pixels.setBrightness(1);
     arcada.pixels.show();
     delay(500);
   } else {
