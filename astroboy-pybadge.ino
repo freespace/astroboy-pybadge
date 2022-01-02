@@ -54,7 +54,6 @@ bool servo_go_endpoint(uint8_t ep) {
 
 uint8_t readButtons() {
   arcada.readButtons();
-  delay(20);
   return arcada.justPressedButtons();
 }
 
