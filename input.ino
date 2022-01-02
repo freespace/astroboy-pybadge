@@ -24,6 +24,7 @@ InputState input_get_uint8(bool init, uint8_t init_val, uint8_t min_val, uint8_t
   uint8_t pressed_buttons = readButtons();
   dirty = pressed_buttons != 0;
 
+  // TODO: implement press-and-hold-to-increment
   if (pressed_buttons & ARCADA_BUTTONMASK_UP) {
     if (tempval < max_val) {
       tempval += 1;
