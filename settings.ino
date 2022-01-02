@@ -111,6 +111,25 @@ AppState settings_set_servo_neutral(bool init) {
   };
 }
 
+AppState settings_set_camera_write_time(bool init) {
+  InputState st = input_get_uint8(
+      init,
+      SharedConfig.camera_write_time_s,
+      0,
+      30,
+      &SharedConfig.camera_write_time_s);
+
+  switch(st) {
+    case INPUT_USER_ACCEPT:
+      config_save(&SharedConfig);
+    case INPUT_USER_CANCEL:
+      return IN_MENU;
+
+    default:
+      return IN_CALLBACK;
+  }
+}
+
 AppState settings_servo_stress_test(bool init) {
   static unsigned long last_t = 0;
 
@@ -174,3 +193,7 @@ void settings_render_servo_neutral() {
   arcada.display->print(SharedConfig.servo_neutral_angle);
 }
 
+void settings_render_camera_write_time() {
+  arcada.display->print("Came. Write Time (s): ");
+  arcada.display->print(SharedConfig.camera_write_time_s);
+}
