@@ -5,7 +5,7 @@ typedef enum {
   IN_CALLBACK,
 } AppState;
 
-/** 
+/**
  * callback when a menu entry is selected. init is true when the callback is called for the first
  * immediately after user selection and false on subsequent calls in loop().
  * Use this to determine when to init values or draw the screen for the first time.
@@ -49,9 +49,9 @@ typedef struct {
   uint8_t servo_angle_endpoint_1;
   uint8_t servo_angle_endpoint_2;
 
-  uint8_t camera_exposure_time_t;
+  uint8_t camera_exposure_time_s;
   uint8_t camera_num_captures;
-  uint8_t camera_write_time_t;
+  uint8_t camera_write_time_s;
 } Config;
 
 typedef enum {
@@ -60,4 +60,9 @@ typedef enum {
   SET_ENDPOINT_INPROG,
 } SetEndpointState;
 
+typedef enum {
+  INPUT_USER_CANCEL,
+  INPUT_USER_ACCEPT,
+  INPUT_IN_PROGRESS,
+} InputState;
 #endif
