@@ -52,6 +52,7 @@ typedef struct {
   uint8_t camera_exposure_time_s;
   uint8_t camera_num_captures;
   uint8_t camera_write_time_s;
+  uint8_t camera_mirror_lockup_time_s;
 } Config;
 
 typedef enum {

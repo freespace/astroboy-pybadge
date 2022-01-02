@@ -60,6 +60,7 @@ bool config_read(File *conf_file, Config *conf) {
   conf->camera_exposure_time_s = conf_file->parseInt();
   conf->camera_num_captures = conf_file->parseInt();
   conf->camera_write_time_s = conf_file->parseInt();
+  conf->camera_mirror_lockup_time_s = conf_file->parseInt();
 
   return true;
 }
@@ -93,6 +94,9 @@ bool config_save(Config *conf) {
     conf_file.print(" ");
 
     conf_file.print(conf->camera_write_time_s);
+    conf_file.print(" ");
+
+    conf_file.print(conf->camera_mirror_lockup_time_s);
     conf_file.print(" ");
 
     success = true;
