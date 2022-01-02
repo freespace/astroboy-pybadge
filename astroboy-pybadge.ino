@@ -33,6 +33,7 @@ Menu main_menu = {
 };
 bool _Dirty = true;
 
+// TODO: move into servo module
 void servo_reset() {
   SAButtonServo.write(SharedConfig.servo_neutral_angle);
 }
@@ -52,6 +53,7 @@ bool servo_go_endpoint(uint8_t ep) {
   }
 }
 
+// TODO: rename and move into input module
 uint8_t readButtons() {
   arcada.readButtons();
   return arcada.justPressedButtons();
