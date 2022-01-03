@@ -10,6 +10,7 @@
 #include "pin_defs.h"
 #include "camera.h"
 #include "capture.h"
+#include "jog.h"
 
 Adafruit_Arcada arcada;
 
@@ -23,12 +24,13 @@ Servo SAButtonServo;
 Menu main_menu = {
   {
     // text, on_select, render, submenu
-    {"Do D.A.R.V.",        NULL,       NULL,  &valign_menu},
+    {"Do D.A.R.V.",       NULL,       NULL,   &valign_menu},
     {"Do Captures",       NULL,       NULL,   &capture_menu},
+    {"Jog RA",            jog_start,  NULL,   NULL},
     {"Settings",          NULL,       NULL,   &settings_menu},
     {"About",             show_about, NULL,   NULL},
   },
-  5,
+  6,
   0
 };
 bool _Dirty = true;
