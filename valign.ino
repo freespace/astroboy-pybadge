@@ -74,8 +74,9 @@ static AppState _valign_start(bool init, bool reversed) {
     arcada.display->println(reversed);
 
     arcada.display->println("Dwelling");
-    // trigger the camera
-    camera_press_release();
+  
+    // start an exposure
+    camera_start_exposure(false);
 
     // dwell for 2 seconds for an extra white spot so we know where the start was
     delay(2000);
@@ -95,11 +96,12 @@ static AppState _valign_start(bool init, bool reversed) {
   long dt = millis() - last_t;
 
   if (dt > SharedConfig.valign_drift_time_s * 1000) {
-    // release the camera
-    camera_press_release();
-
-    // stop the motion
+    // stop the motion first b/c camera might have a significant
+    // amount of write-time delay
     servo_reset();
+
+    // end the exposure as we are done
+    camera_end_exposure(false);
 
     // and we are done
     return IN_MENU;

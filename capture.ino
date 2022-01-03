@@ -62,15 +62,11 @@ AppState capture_start(bool init) {
     }
   } else {
     if (capturing && capture_deadline_passed) {
-      // stop capture
-      camera_release();
-
-      // wait for camera to write data
       arcada.display->setTextSize(1);
       arcada.display->println("");
-      arcada.display->println("Writing data");
-      // let the camera write data out
-      delay(SharedConfig.camera_write_time_s * 1000);
+
+      // end the exposure
+      camera_end_exposure(true);
 
       // increment the number of captures taken
       num_captured += 1;
@@ -78,25 +74,11 @@ AppState capture_start(bool init) {
       // no longer capturing
       capturing = false;
     } else if (capturing == false) {
-      // if we are not done and not capturing, start a new capture
-      if (SharedConfig.camera_mirror_lockup_time_s > 0) {
-        arcada.display->println("Engaging Mirror Lockup");
-        // mirror lockup is enabled, so we press-release to lock the mirror
-        camera_press_release();
+      arcada.display->setTextSize(1);
+      arcada.display->println("");
 
-        // then wait for the configured amount of time for vibrations due to
-        // mirror-slap to go away. This also lets mount vibrations to die away
-        delay(SharedConfig.camera_mirror_lockup_time_s * 1000);
-      }
-
-      // start the capture, assuming camera is in bulb mode
-      camera_press();
-
-      // this is a hack to take into account the delay b/t btn press and exposure
-      // starting on my camera. This could be a setting variable but it probably
-      // doesn't matter given we normally do exposures of >10 seconds 100ms here
-      // and there won't hurt
-      delay(110);
+      // start a new exposure
+      camera_start_exposure(true);
 
       // set when the capture will stop. This must come after camera_press()
       // starts when that function returns
